@@ -1,0 +1,48 @@
+UNIVERSITY OFFICIAL NOTICES - SAMPLE DOCUMENT
+=============================================
+This is a sample document demonstrating the RAG functionality of Truth Sentinel.
+Add your actual university PDFs and text documents to this data/ folder.
+
+IMPORTANT: For the bot to work effectively, add your official university documents here:
+- Academic calendars
+- Exam schedules and timetables
+- Fee structure documents
+- Holiday lists
+- Official circulars and notices
+- Placement announcements
+- Hostel rules and regulations
+
+SAMPLE NOTICES FOR TESTING:
+---------------------------
+
+NOTICE: END SEMESTER EXAMINATION SCHEDULE
+Date: November 2024
+The end semester examinations for all undergraduate programs will commence from December 15, 2024.
+Students are advised to collect their hall tickets from the examination section by December 10, 2024.
+Source: Examination Controller's Office
+
+NOTICE: WINTER VACATION 2024
+The university will remain closed for winter vacation from December 25, 2024 to January 1, 2025.
+Classes will resume on January 2, 2025.
+Source: Academic Administration
+
+NOTICE: FEE PAYMENT DEADLINE
+Last date for fee payment for the Spring 2025 semester is January 15, 2025.
+Late fee of Rs. 500/- will be applicable after the deadline.
+Source: Finance Department
+
+NOTICE: LIBRARY TIMINGS
+Library timings during examination period:
+Morning: 8:00 AM to 10:00 PM
+Night Study: 10:00 PM to 6:00 AM (with valid permission)
+Source: Central Library
+
+NOTICE: PLACEMENT DRIVE
+Campus placement drive by TechCorp will be held on January 20, 2025.
+Eligible students: B.Tech (CSE, IT, ECE) with CGPA above 7.0
+Registration deadline: January 10, 2025
+Source: Training and Placement Cell
+
+=============================================
+Add your actual official documents to this folder for accurate verification.
+The bot will search through all .txt and .pdf files in the data/ folder.
