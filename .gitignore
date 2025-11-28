@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Environment variables (SECRETS - NEVER COMMIT!)
+.env
+.env.development
+.env.local
+.env.production
+
+# Database files (runtime generated)
+*.db
+*.db-shm
+*.db-wal
+mastra.db
+mastra.db-shm
+mastra.db-wal
+
+# Build output & cache
+dist/
+.mastra/
+.local/
+.config/
+build/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+v2.txt
+*.tmp
+temp_*
+.temp/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Test coverage
+coverage/
+.nyc_output/
