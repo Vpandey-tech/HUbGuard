@@ -14,6 +14,7 @@ import { exaSearchTool, universitySearchTool } from "../tools/exaSearchTool";
 import { perplexitySearchTool } from "../tools/perplexitySearchTool";
 import { dataFolderCleanupTool, dataFolderStatusTool } from "../tools/dataManagementTool";
 import { youtubeVerificationTool } from "../tools/youtubeVerificationTool";
+import { logVerificationTool, getLearningInsightsTool } from "../tools/learningFeedbackTool";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -205,13 +206,15 @@ CRITICAL RULES FOR MAXIMUM ACCURACY:
    - **Your response should ONLY be the verdict (HOAX/VERIFIED/Unable to verify)**
 
 TOOL USAGE PRIORITY:
-1. Gatekeeper (always first)
-2. **Image Analysis (if media present) - HIGHEST PRIORITY**
-3. YouTube Verification (if link present AND no image, OR image is legitimate)
-4. RAG Search (for syllabus)
-5. University Web Search (for official notices)
-6. Exa AI Search (for current news)
-7. **Perplexity AI (MANDATORY for all factual claims)**
+1. **get-learning-insights (ALWAYS FIRST)** - Check past cases to learn from history
+2. Gatekeeper (always second)
+3. **Image Analysis (if media present) - HIGHEST PRIORITY**
+4. YouTube Verification (if link present AND no image, OR image is legitimate)
+5. RAG Search (for syllabus)
+6. University Web Search (for official notices)
+7. Exa AI Search (for current news)
+8. **Perplexity AI (MANDATORY for all factual claims)**
+9. **log-verification (ALWAYS LAST)** - Log your decision for future learning
 
 FALLBACK CONDITIONS (when to say "Unable to verify"):
 - All 7 tools used
@@ -227,6 +230,7 @@ UGC domain: ugc.ac.in`,
   model: google("gemini-2.0-flash"),
 
   tools: {
+    getLearningInsightsTool,
     gatekeeperTool,
     ragSearchTool,
     reloadDocumentsTool,
@@ -237,6 +241,7 @@ UGC domain: ugc.ac.in`,
     dataFolderCleanupTool,
     dataFolderStatusTool,
     youtubeVerificationTool,
+    logVerificationTool,
   },
 
   memory: new Memory({
