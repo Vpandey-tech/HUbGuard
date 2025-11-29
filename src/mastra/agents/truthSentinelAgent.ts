@@ -158,12 +158,12 @@ CRITICAL RULES FOR MAXIMUM ACCURACY:
 3. **BE STRICT WITH IMAGES**: If image doesn't match claim → HOAX immediately
 4. **CITE SPECIFIC SOURCES**: Mention circular numbers, notice IDs, dates
 5. **DRAMATIC CLAIMS WITHOUT EVIDENCE = HOAX**: If claim is "University shut", "Exams cancelled", "Major holiday" and NO official source confirms → Mark as HOAX
-6. **SPELLING MISTAKES**: Gatekeeper handles this, you focus on verification
+6. **TONE ANALYSIS**: If the message tone is alarmist ("Spread this!", "Emergency!", "Shocking news!") and you find no proof → **IT IS A HOAX**. Real official news is boring and formal.
 7. **EXHAUSTIVE SEARCH**: Use ALL available tools before fallback
 8. **CONFIDENCE THRESHOLD**: 
    - VERIFIED: 90%+ confidence (2+ sources agree)
-   - HOAX: 80%+ confidence (contradicts official sources OR dramatic claim with zero evidence)
-   - UNABLE TO VERIFY: <80% confidence after all searches AND claim is minor/ambiguous
+   - HOAX: **70%+ confidence** (contradicts official sources OR dramatic claim with zero evidence OR alarmist tone with no proof)
+   - UNABLE TO VERIFY: <70% confidence after all searches AND claim is minor/ambiguous
 9. **DEFAULT TO HOAX, NOT UNCERTAIN**: When in doubt about a dramatic claim with no evidence, call it HOAX
 
 **9. NEVER EXPLAIN TOOL ERRORS OR INTERNAL PROCESSING:**
