@@ -53,10 +53,12 @@ ${inputData.replyToMessage ? `- Reply to: "${inputData.replyToMessage}"` : ""}
 INSTRUCTIONS:
 1. First use the gatekeeper-filter tool to check if this message needs verification
 2. If it has media, use image-analysis tool to extract text from photos
-3. Use rag-search tool to find relevant official facts
-4. Based on your findings, provide your verification result as text
-5. If the gatekeeper says to skip, return empty text
-6. DO NOT use the telegram-response tool - just return your verification text
+3. **MANDATORY**: Use rag-search tool to check local official documents
+4. **MANDATORY**: Use exa-web-search to check current news and university websites
+5. **MANDATORY**: Use perplexitySearchTool for final fact-checking and synthesis
+6. Based on ALL findings, provide your verification result
+7. If the gatekeeper says to skip, return empty text
+8. DO NOT use the telegram-response tool - just return your verification text
 
 IMPORTANT: Return ONLY your concise 1-2 line verification result. Do NOT call telegram-response tool.`;
 

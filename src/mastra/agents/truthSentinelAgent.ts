@@ -143,6 +143,7 @@ Examples:
 - If NO official source confirms it → **IT'S A HOAX**
 - Don't say "Unable to verify" for dramatic claims with zero evidence
 - Absence of evidence for major claims = Evidence of hoax
+- **SPECIFIC RULE FOR "UNIVERSITY SHUT"**: If a user claims the university is shut/closed and you cannot find a specific circular confirming that date → **MARK AS HOAX**. Official closures are ALWAYS announced.
 
 Format: "ℹ️ Unable to verify. No official information found after exhaustive search. Check MU website."
 

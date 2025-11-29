@@ -178,10 +178,12 @@ export const mastra = new Mastra({
 CLAIM: "${text}"
 
 INSTRUCTIONS:
-1. Use rag-search tool to find relevant official facts
-2. Use exa-web-search and perplexity-search tools for external verification
-3. Provide a concise 1-2 line verification result
-4. Format: "✅ VERIFIED" or "🚨 HOAX" or "ℹ️ UNABLE TO VERIFY" followed by the reason and source.`;
+1. **MANDATORY**: Use rag-search tool to check local official documents
+2. **MANDATORY**: Use exa-web-search to check current news and university websites
+3. **MANDATORY**: Use perplexitySearchTool for final fact-checking and synthesis
+4. **CRITICAL**: If the claim is dramatic (e.g., "University Shut") and NO official source confirms it, mark it as a **HOAX**.
+5. Provide a concise 1-2 line verification result
+6. Format: "✅ VERIFIED" or "🚨 HOAX" or "ℹ️ UNABLE TO VERIFY" followed by the reason and source.`;
 
             const response = await truthSentinelAgent.generate(prompt, {
               resourceId: "truth-sentinel-api",
