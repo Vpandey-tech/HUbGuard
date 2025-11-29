@@ -1,0 +1,42 @@
+{
+    "manifest_version": 3,
+    "name": "HubGuard - Truth Sentinel",
+    "version": "1.0",
+    "description": "Verify WhatsApp & Telegram messages instantly with HubGuard AI.",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://localhost:5000/*",
+        "https://web.whatsapp.com/*",
+        "https://web.telegram.org/*"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://web.whatsapp.com/*",
+                "https://web.telegram.org/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "styles.css"
+            ]
+        }
+    ],
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
+}

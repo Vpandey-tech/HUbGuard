@@ -158,6 +158,57 @@ export const mastra = new Mastra({
         },
       },
 
+      {
+        path: "/api/verify-claim",
+        method: "POST",
+        createHandler: async ({ mastra }) => async (c: any) => {
+          const logger = mastra?.getLogger();
+          try {
+            const body = await c.req.json();
+            const { text } = body;
+
+            if (!text) {
+              return c.json({ error: "Text is required" }, 400);
+            }
+
+            logger?.info("🔍 [API] Received verification request", { textLength: text.length });
+
+            const prompt = `Analyze this claim and verify it against official university documents.
+
+CLAIM: "${text}"
+
+INSTRUCTIONS:
+1. Use rag-search tool to find relevant official facts
+2. Use exa-web-search and perplexity-search tools for external verification
+3. Provide a concise 1-2 line verification result
+4. Format: "✅ VERIFIED" or "🚨 HOAX" or "ℹ️ UNABLE TO VERIFY" followed by the reason and source.`;
+
+            const response = await truthSentinelAgent.generate(prompt, {
+              resourceId: "truth-sentinel-api",
+              threadId: `api-request-${Date.now()}`,
+              maxSteps: 5,
+            });
+
+            logger?.info("✅ [API] Verification complete", { response: response.text });
+
+            return c.json({
+              status: "success",
+              verdict: response.text,
+              timestamp: new Date().toISOString(),
+            });
+
+          } catch (error: any) {
+            logger?.error("❌ [API] Error processing request", { error: error.message });
+            return c.json({
+              status: "error",
+              message: "Internal server error during verification",
+              details: error.message
+            }, 500);
+          }
+        },
+      },
+
+
       ...registerTelegramTrigger({
         triggerType: "telegram/message",
         handler: async (mastra, triggerInfo) => {
