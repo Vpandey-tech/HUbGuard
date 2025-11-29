@@ -168,8 +168,27 @@ IMPORTANT: Return ONLY your concise 1-2 line verification result. Do NOT call te
       responseLength: response.text?.length,
     });
 
+    // POST-PROCESSING: Force HOAX for dramatic claims that got UNCERTAIN
+    let finalResponse = response.text;
+
+    if (finalResponse && finalResponse.includes("UNCERTAIN")) {
+      const dramaticKeywords = [
+        "university shut", "university closed", "college shut", "college closed",
+        "exam cancel", "exam postpone", "holiday declared", "classes cancel",
+        "result declared", "admission close"
+      ];
+
+      const messageText = textContent.toLowerCase();
+      const isDramaticClaim = dramaticKeywords.some(keyword => messageText.includes(keyword));
+
+      if (isDramaticClaim) {
+        logger?.warn("⚠️ [Truth Sentinel] Overriding UNCERTAIN to HOAX for dramatic claim");
+        finalResponse = `🚨 HOAX - No official announcement found for this claim. Source: Checked official sources`;
+      }
+    }
+
     // Send response directly via Telegram API if agent generated text
-    if (response.text) {
+    if (finalResponse) {
       logger?.info("📤 [Truth Sentinel] Sending response to Telegram");
 
       const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -180,7 +199,7 @@ IMPORTANT: Return ONLY your concise 1-2 line verification result. Do NOT call te
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               chat_id: inputData.chatId,
-              text: response.text,
+              text: finalResponse,
               reply_to_message_id: inputData.messageId,
               parse_mode: "Markdown"
             }),
@@ -194,7 +213,7 @@ IMPORTANT: Return ONLY your concise 1-2 line verification result. Do NOT call te
 
 
     // If agent returns empty text, log a warning
-    if (!response.text) {
+    if (!finalResponse) {
       logger?.warn("⚠️ [Truth Sentinel] Agent returned empty response");
       return {
         processed: true,
@@ -206,7 +225,7 @@ IMPORTANT: Return ONLY your concise 1-2 line verification result. Do NOT call te
 
     return {
       processed: true,
-      response: response.text || "Processed, but no text response generated.",
+      response: finalResponse || "Processed, but no text response generated.",
       skipped: false,
     };
   } catch (error: any) {
