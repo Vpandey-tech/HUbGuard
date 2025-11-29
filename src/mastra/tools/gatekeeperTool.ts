@@ -95,14 +95,61 @@ const PANIC_KEYWORDS = [
   "rusticated",
 ];
 
+// Levenshtein distance for fuzzy matching (spelling mistakes)
+function levenshteinDistance(a: string, b: string): number {
+  const matrix: number[][] = [];
+
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
+}
+
+// Fuzzy keyword matching with spelling tolerance
+function fuzzyMatchKeyword(word: string, keyword: string, maxDistance: number = 2): boolean {
+  // Exact match
+  if (word === keyword) return true;
+
+  // Contains match
+  if (word.includes(keyword) || keyword.includes(word)) return true;
+
+  // Fuzzy match for spelling mistakes
+  if (word.length >= 4 && keyword.length >= 4) {
+    const distance = levenshteinDistance(word, keyword);
+    const threshold = Math.min(maxDistance, Math.floor(keyword.length * 0.3));
+    return distance <= threshold;
+  }
+
+  return false;
+}
+
 export const gatekeeperTool = createTool({
   id: "gatekeeper-filter",
   description:
-    "Pre-filters incoming messages to determine if they need verification. Activates for messages with panic keywords, images, or potential misinformation.",
+    "Pre-filters incoming messages to determine if they need verification. Activates for messages with panic keywords (including spelling mistakes), images, or potential misinformation.",
 
   inputSchema: z.object({
     message: z.string().describe("The text message to analyze"),
-    caption: z.string().optional().describe("Caption from image/document if any"),
+    caption: z.string().optional().default("").describe("Caption from image/document if any"),
     hasPhoto: z.boolean().describe("Whether the message contains a photo"),
     hasDocument: z.boolean().describe("Whether the message contains a document"),
     isForwarded: z.boolean().describe("Whether the message is forwarded"),
@@ -170,13 +217,21 @@ export const gatekeeperTool = createTool({
       }
     }
 
-    // 4. Check for PANIC KEYWORDS (university-related misinformation triggers)
-    const detectedKeywords = PANIC_KEYWORDS.filter((keyword) =>
-      textToAnalyze.includes(keyword.toLowerCase())
-    );
+    // 4. ENHANCED: Check for PANIC KEYWORDS with fuzzy matching (catches spelling mistakes)
+    const detectedKeywords: string[] = [];
+
+    for (const word of words) {
+      for (const keyword of PANIC_KEYWORDS) {
+        if (fuzzyMatchKeyword(word, keyword.toLowerCase())) {
+          if (!detectedKeywords.includes(keyword)) {
+            detectedKeywords.push(keyword);
+          }
+        }
+      }
+    }
 
     if (detectedKeywords.length > 0) {
-      logger?.info("⚠️ [Gatekeeper] Panic keywords detected - HIGH priority activation", {
+      logger?.info("⚠️ [Gatekeeper] Panic keywords detected (fuzzy match) - HIGH priority activation", {
         keywords: detectedKeywords
       });
       return {
